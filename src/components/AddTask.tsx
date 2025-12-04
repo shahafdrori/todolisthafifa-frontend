@@ -30,6 +30,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({
   return (
     <Button
       variant="contained"
+      data-test='add-task-button'
       sx={{ marginTop: "10px" }}
       onClick={handleClick}
     >

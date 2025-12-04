@@ -93,6 +93,15 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     );
     markerSource.addFeature(markerFeature);
 
+    if (typeof window !== "undefined") {
+      (window as any).__OL_DEBUG__ = {
+        map,
+        markerFeature,
+        getZoom: () => map.getView().getZoom(),
+        getMarkerCoords: () => markerFeature.getGeometry()?.getCoordinates(),
+      };
+    }
+
     if (formMode) {
       map.on("click", (event) => {
         const coordinates = toLonLat(event.coordinate);
@@ -104,7 +113,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     return () => map.setTarget(undefined);
   }, [formMode, setCords, task]);
 
-  return <Box ref={mapDivRef} sx={formMode ? formStyle : pageStyle} />;
+  return <Box data-test="task-map" ref={mapDivRef} sx={formMode ? formStyle : pageStyle} />;
 };
 
 export default OpenLayersMap;

@@ -168,6 +168,7 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
                   color="primary"
                   label="Lng"
                   size="small"
+                  inputProps={{ "data-test": "lng-input" }}
                   error={
                     Boolean(errors.coordinates?.longitude) &&
                     Boolean(touched.coordinates?.longitude)
@@ -182,6 +183,7 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
                   color="primary"
                   label="Lat"
                   size="small"
+                  inputProps={{ "data-test": "lat-input" }}
                   error={
                     Boolean(errors.coordinates?.latitude) &&
                     Boolean(touched.coordinates?.latitude)

@@ -11,13 +11,13 @@ const NavBar: React.FC = () => {
     <AppBar sx={{ backgroundColor: "#343030ff", boxShadow: "none" }}>
       <Toolbar>
         <Box>
-          <Button color="inherit" component={Link} to="/">
+          <Button data-test='nav-home' color="inherit" component={Link} to="/">
             Home
           </Button>
-          <Button color="inherit" component={Link} to="/admin-page">
+          <Button data-test='nav-admin' color="inherit" component={Link} to="/admin-page">
             Admin
           </Button>
-          <Button color="inherit" component={Link} to="/tasks-map">
+          <Button data-test='nav-map' color="inherit" component={Link} to="/tasks-map">
             Map
           </Button>
         </Box>
