@@ -207,6 +207,7 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
                     variant="contained"
                     sx={{ backgroundColor: "red", color: "white" }}
                     onClick={handleCloseForm}
+                    data-test="cancel-button"
                   >
                     Cancel
                   </Button>

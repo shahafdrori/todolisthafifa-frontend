@@ -98,7 +98,8 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
         map,
         markerFeature,
         getZoom: () => map.getView().getZoom(),
-        getMarkerCoords: () => markerFeature.getGeometry()?.getCoordinates(),
+        getMarkerCoords: () =>
+          (markerFeature.getGeometry() as any)?.getCoordinates?.(),
       };
     }
 
