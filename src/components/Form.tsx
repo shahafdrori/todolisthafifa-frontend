@@ -27,6 +27,7 @@ import { Task } from "../atoms/atoms";
 
 interface FormProps {
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 const initalValues = {
@@ -40,7 +41,7 @@ const initalValues = {
   },
 };
 
-const FormComponent: React.FC<FormProps> = ({ onClose }) => {
+const FormComponent: React.FC<FormProps> = ({ onClose, onSuccess }) => {
   const [editMode, setEditMode] = useAtom(editModeAtom);
   const [formOpen, setFormOpen] = useAtom(openFormAtom);
   const tasks = useAtomValue(tasksAtom);
@@ -57,7 +58,7 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
     console.log("Form values:", values);
     try {
       if (editMode) {
-        editData({ values });
+        await editData({ values });
         enqueueSnackbar("Task Edited", { variant: "success" });
         setEditMode(false);
       } else if (
@@ -72,11 +73,18 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
         enqueueSnackbar("Task Added", { variant: "success" });
       }
 
+      // NEW: ask parent (AdminTable) to reload data
+      if (onSuccess) {
+        await onSuccess();
+      }
+
       setFormOpen(false);
     } catch (error) {
       enqueueSnackbar("Operation failed", { variant: "error" });
       console.error(error);
     }
+
+    // keeps your existing react-query invalidation
     queryClient.invalidateQueries(["Tasks"]);
   };
 

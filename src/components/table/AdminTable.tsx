@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// todolisthafifa/src/components/table/AdminTable.tsx
+import { useEffect, useState, useCallback } from "react";
 import {
   createColumnHelper,
   flexRender,
@@ -54,7 +55,6 @@ export const columns = [
     cell: (info) => dayjs(info.getValue()).format("DD MMM YYYY"),
   }),
 
-  // ✅ New nested accessors
   columnHelper.accessor((row) => row.coordinates.longitude, {
     id: "longitude",
     header: "Longitude",
@@ -75,17 +75,18 @@ const TaskTable = () => {
     setFormOpen(false);
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const tasks = await fetchAllTasks();
-        setData(tasks);
-      } catch (error) {
-        console.error("Failed to fetch tasks", error);
-      }
-    };
-    loadData();
+  const loadData = useCallback(async () => {
+    try {
+      const tasks = await fetchAllTasks();
+      setData(tasks);
+    } catch (error) {
+      console.error("Failed to fetch tasks", error);
+    }
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const table = useReactTable({
     data,
@@ -133,11 +134,12 @@ const TaskTable = () => {
             Add Task
           </Button>
         </Box>
+
         <FormComponent
-          open={formOpen}
-          setFormOpen={setFormOpen}
           onClose={handleClose}
+          onSuccess={loadData}
         />
+
         <TableContainer>
           <Table>
             <TableHead>
