@@ -13,6 +13,7 @@ const ShowCompletedButton = () => {
       variant="contained"
       sx={{ marginTop: "10px", marginLeft: "5px", backgroundColor: "green" }}
       onClick={handleShowCompleted}
+      data-test='show-completed-button'
     >
       Show Completed
     </Button>

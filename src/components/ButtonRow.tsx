@@ -14,7 +14,7 @@ const ButtonRow: React.FC<ButtonRowProps> = ({ formOpen, setFormOpen }) => {
 
   return (
     <Box className="ButtonRow">
-      <AddTaskButton formOpen={formOpen} setFormOpen={setFormOpen} data-test="add-task-button" />
+      <AddTaskButton formOpen={formOpen} setFormOpen={setFormOpen} />
       <ShowCompletedButton />
       <ClearAlllTasksButton />
     </Box>

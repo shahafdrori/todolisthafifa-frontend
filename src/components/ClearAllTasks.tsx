@@ -17,6 +17,7 @@ const ClearAlllTasksButton = () => {
       variant="contained"
       sx={{ marginTop: "10px", marginLeft: "5px", backgroundColor: "red" }}
       onClick={handleClearAll}
+      data-test='clear-all-button'
     >
       Clear All
     </Button>

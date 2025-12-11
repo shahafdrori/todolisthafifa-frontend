@@ -14,6 +14,7 @@ const SearchBar = () => {
       sx={{ backgroundColor: "white", borderRadius: "8px" }}
       value={searchValue}
       onChange={(e) => setSearchValue(e.target.value)}
+      inputProps={{ "data-test": "search-input" }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">

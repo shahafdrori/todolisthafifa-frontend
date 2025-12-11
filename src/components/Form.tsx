@@ -200,6 +200,7 @@ const FormComponent: React.FC<FormProps> = ({ onClose }) => {
                     type="submit"
                     sx={{ color: "white" }}
                     disabled={!(isValid && dirty)}
+                    data-test="submit-button"
                   >
                     Submit
                   </Button>

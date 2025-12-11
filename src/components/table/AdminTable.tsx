@@ -128,6 +128,7 @@ const TaskTable = () => {
             color="primary"
             startIcon={<AddIcon />}
             onClick={() => setFormOpen(true)}
+            data-test="add-task-button"
           >
             Add Task
           </Button>
