@@ -6,12 +6,16 @@ export interface sendDataProps {
 }
 
 export const sendData = async ({ values }: sendDataProps) => {
-  await axios
-    .post(`${import.meta.env.VITE_API_KEY}/tasks/add`, values)
-    .then((response) => {
-      console.log("Task created successfully:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error creating Task:", error);
-    });
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_KEY}/tasks/add`,
+      values
+    );
+    console.log("Task created successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Task:", error);
+    // re-throw so Form.handleSubmit can show "Operation failed"
+    throw error;
+  }
 };
