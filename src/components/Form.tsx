@@ -79,14 +79,19 @@ const FormComponent: React.FC<FormProps> = ({ onClose, onSuccess }) => {
       }
 
       setFormOpen(false);
-    } catch (error) {
-      enqueueSnackbar("Operation failed", { variant: "error" });
-      console.error(error);
+    } catch (error: any) {
+      // Try to show backend error if exists, fallback to generic
+      const backendMessage =
+        error?.response?.data?.error || "Operation failed";
+
+      enqueueSnackbar(backendMessage, { variant: "error" });
+      console.error("Task operation failed:", error);
     }
 
     // keeps your existing react-query invalidation
     queryClient.invalidateQueries(["Tasks"]);
   };
+
 
   return (
     <Box>
@@ -96,7 +101,9 @@ const FormComponent: React.FC<FormProps> = ({ onClose, onSuccess }) => {
           initialValues={editMode ? initialData : initalValues}
           enableReinitialize={true}
           validationSchema={object({
-            name: string().required("Please enter a name"),
+            name: string()
+              .required("Please enter a name")
+              .max(30, "Name must be at most 30 characters"),
             priority: number()
               .required("Enter a priority level")
               .min(1, "Minimum is 1")
