@@ -6,9 +6,17 @@ import { useQueryClient } from "@tanstack/react-query";
 const ClearAlllTasksButton = () => {
   const queryClient = useQueryClient();
 
-  const handleClearAll = () => {
-    deleteAllTasks();
-    queryClient.invalidateQueries(["Tasks"]);
+  const handleClearAll = async () => {
+    const ok = await deleteAllTasks();
+
+    if (!ok) {
+      enqueueSnackbar("Failed to clear tasks", { variant: "error" });
+      return;
+    }
+    // instant UI update (FetchTasksList will see data change and set tasksAtom to [])
+    queryClient.setQueryData(["Tasks"], []);
+    // sync with backend (forces refetch of active queries)
+    await queryClient.invalidateQueries({ queryKey: ["Tasks"] });
     enqueueSnackbar("All tasks cleared", { variant: "warning" });
   };
 
