@@ -54,43 +54,39 @@ const FormComponent: React.FC<FormProps> = ({ onClose, onSuccess }) => {
     enqueueSnackbar("Form closed", { variant: "info" });
   };
 
-  const handleSubmit = async (values: Task) => {
-    console.log("Form values:", values);
-    try {
-      if (editMode) {
-        await editData({ values });
-        enqueueSnackbar("Task Edited", { variant: "success" });
-        setEditMode(false);
-      } else if (
-        tasks.some(
-          (task) => task.name.toLowerCase() === values.name.toLowerCase()
-        )
-      ) {
-        enqueueSnackbar("Task name must be unique", { variant: "error" });
-        return;
-      } else {
-        await sendData({ values });
-        enqueueSnackbar("Task Added", { variant: "success" });
-      }
+const handleSubmit = async (values: Task) => {
+  console.log("Form values:", values);
 
-      // NEW: ask parent (AdminTable) to reload data
-      if (onSuccess) {
-        await onSuccess();
-      }
-
-      setFormOpen(false);
-    } catch (error: any) {
-      // Try to show backend error if exists, fallback to generic
-      const backendMessage =
-        error?.response?.data?.error || "Operation failed";
-
-      enqueueSnackbar(backendMessage, { variant: "error" });
-      console.error("Task operation failed:", error);
+  try {
+    if (editMode) {
+      await editData({ values });
+      enqueueSnackbar("Task Edited", { variant: "success" });
+      setEditMode(false);
+    } else if (
+      tasks.some((task) => task.name.toLowerCase() === values.name.toLowerCase())
+    ) {
+      enqueueSnackbar("Task name must be unique", { variant: "error" });
+      return;
+    } else {
+      await sendData({ values });
+      enqueueSnackbar("Task Added", { variant: "success" });
     }
 
-    // keeps your existing react-query invalidation
-    queryClient.invalidateQueries(["Tasks"]);
-  };
+    if (onSuccess) {
+      await onSuccess();
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ["Tasks"] });
+
+    setFormOpen(false);
+  } catch (error: any) {
+    const backendMessage = error?.response?.data?.error || "Operation failed";
+    enqueueSnackbar(backendMessage, { variant: "error" });
+    console.error("Task operation failed:", error);
+    return;
+  }
+};
+
 
 
   return (
