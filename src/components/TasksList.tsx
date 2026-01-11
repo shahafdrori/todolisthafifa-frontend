@@ -67,8 +67,14 @@ const TasksList: React.FC<TasksListProps> = ({ data }) => {
   };
 
   const handleDelete = async (id: string) => {
-    deleteOneTask(id);
-    queryClient.invalidateQueries(["Tasks"]);
+    const ok = await deleteOneTask(id);
+    if (!ok) return;
+
+    queryClient.setQueryData(["Tasks"], (old: any) =>
+      Array.isArray(old) ? old.filter((t) => t._id !== id) : old
+    );
+
+    await queryClient.invalidateQueries({ queryKey: ["Tasks"] });
   };
 
   const formatDate = (date?: string) => {
